@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    @* <title>@ViewData["Title"] - WEB_353503_Sebelev.UI</title> *@
+    @* <script type="importmap"></script> *@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+<div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</div>
+
+<header>
+    <div class="container">
+        <nav class="navbar navbar-expand-md" data-bs-theme="dark">
+            <a class="navbar-brand nav-color" href="#">WebLabs_114</a>
+            
+            <div class="navbar-nav">
+                <a href="#" class="nav-link active">Lab1</a>
+                <a href="#" class="nav-link">Catalog</a>
+                <a href="#" class="nav-link">Administration</a>
+            </div>
+            
+            <a href="#" class="navbar-text ms-auto">
+                0,00 руб <i class="bi bi-cart"></i> (0)
+            </a>
+
+            <div class="dropdown ms-4 nav-color">
+                <button class="btn btn-secondary dropdown-toggle" type="button"
+                        id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    User@gmail.com
+                    <img src="Images/default_profile.png" width="30" alt="User" class="rounded nav-color"/>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" data-bs-theme="light">
+                    <li>
+                        <span class="dropdown-item-text">
+                            <img src="Images/default_profile.png" width="50" alt="User" class="rounded"/>
+                            user@gmail.com
+                        </span>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form method="post" id="logoutForm" class="form-inline">
+                            <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
+<main class="container">
+    @RenderBody()
+</main>
+<footer>
+    <div class="container">
+        <div class="navbar bg-dark navbar-expand-md border-bottom border-body" data-bs-theme="dark">
+            <div class="navbar-nav ms-auto">
+                <a href="https://facebook.com" class="nav-item nav-link">
+                    <i class="bi bi-facebook" style="font-size: 2rem"></i>
+                </a>
+                <a href="https://x.com" class="nav-item nav-link">
+                    <i class="bi bi-twitter" style="font-size: 2rem"></i>
+                </a>
+                <a href="https://t.me/fcsan_by" class="nav-item nav-link">
+                    <i class="bi bi-telegram" style="font-size: 2rem"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
