@@ -30,7 +30,7 @@ public class MemoryBookCategoryService : IBookCategoryService
             new Category
             {
                 Id = 4,
-                Name = "Роман",
+                Name = "Романтика",
                 NormalizedName = "romance"
             },
             new Category
