@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    @* <title>@ViewData["Title"] - WEB_353503_Sebelev.UI</title> *@
+    @* <script type="importmap"></script> *@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+<div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</div>
+
+<header>
+    <div class="container">
+        <nav class="navbar navbar-expand-md" data-bs-theme="dark">
+            
+            <partial name="_MenuPartial"></partial>
+
+            <partial name="_UserInfoPartial"></partial>
+            
+        </nav>
+    </div>
+</header>
+<main class="container">
+    @RenderBody()
+</main>
+<footer>
+    <div class="container">
+        <div class="navbar bg-dark navbar-expand-md border-bottom border-body" data-bs-theme="dark">
+            <div class="navbar-nav ms-auto">
+                <a href="https://facebook.com" class="nav-item nav-link">
+                    <i class="bi bi-facebook" style="font-size: 2rem"></i>
+                </a>
+                <a href="https://x.com" class="nav-item nav-link">
+                    <i class="bi bi-twitter" style="font-size: 2rem"></i>
+                </a>
+                <a href="https://t.me/fcsan_by" class="nav-item nav-link">
+                    <i class="bi bi-telegram" style="font-size: 2rem"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
