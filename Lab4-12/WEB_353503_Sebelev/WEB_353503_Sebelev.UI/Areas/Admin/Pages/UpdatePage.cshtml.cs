@@ -59,33 +59,9 @@ namespace WEB_353503_Sebelev.UI.Areas.Admin.Pages
                 return Page();
             }
 
-            /*
-            _context.Attach(Book).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BookExists(Book.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }*/
-
-            await _bookService.UpdateBookAsync(Book.Id, Book, Image);
+            await _bookService.UpdateBookAsync(Book.Id.Value, Book, Image);
 
             return RedirectToPage("./Index");
         }
-
-        /*private bool BookExists(int id)
-        {
-            return _context.Books.Any(e => e.Id == id);
-        }*/
     }
 }

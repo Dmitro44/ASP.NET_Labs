@@ -93,6 +93,8 @@ public static class BookEndpoints
             {
                 newBook.Image = await mediator.Send(new SaveImage(file));
             }
+
+            newBook.Id = null;
         
             db.Books.Add(newBook);
             await db.SaveChangesAsync();

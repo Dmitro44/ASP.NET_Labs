@@ -41,9 +41,6 @@ namespace WEB_353503_Sebelev.UI.Areas.Admin.Pages
                 return Page();
             }
 
-            //TODO: Change ID to int? in Book (EF can't add new Book to db
-            // because it has id == 0)
-
             var response = await _bookService.CreateBookAsync(Book, Image);
             if (!response.Successfull)
             {

@@ -41,14 +41,6 @@ namespace WEB_353503_Sebelev.UI.Areas.Admin.Pages
             {
                 return NotFound();
             }
-
-            /*var book = await _context.Books.FindAsync(id);
-            if (book != null)
-            {
-                Book = book;
-                _context.Books.Remove(Book);
-                await _context.SaveChangesAsync();
-            }*/
             
             await _bookService.DeleteBookAsync(id.Value);
 
