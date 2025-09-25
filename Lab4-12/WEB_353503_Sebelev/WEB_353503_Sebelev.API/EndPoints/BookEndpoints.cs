@@ -16,14 +16,16 @@ public static class BookEndpoints
     {
         var group = routes.MapGroup("/api/Book")
             .WithTags(nameof(Book))
-            .DisableAntiforgery();
+            .DisableAntiforgery()
+            .RequireAuthorization("admin");
 
         group.MapGet("/{category:alpha?}", async (IMediator mediator, string? category, int pageNo = 1) =>
         {
             var data = await mediator.Send(new GetListOfBooks(category, pageNo));
             return TypedResults.Ok(data);
         })
-        .WithName("GetAllBooks");
+        .WithName("GetAllBooks")
+        .AllowAnonymous();
 
         group.MapGet("/{id}", async Task<Results<Ok<ResponseData<Book>>, NotFound<ResponseData<Book>>>> (int id, AppDbContext db) =>
         {

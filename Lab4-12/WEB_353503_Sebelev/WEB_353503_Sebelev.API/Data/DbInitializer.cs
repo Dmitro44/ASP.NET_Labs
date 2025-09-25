@@ -68,7 +68,7 @@ public static class DbInitializer
                 Id = 1, Title = "Автостопом по галактике",
                 Description = "Комическое путешествие по космосу после гибели Земли",
                 Author = "Дуглас Адамс",
-                Price = 100, Image = $"{baseUrl}/Images/The-Hitchhiker_s-Guide-to-the-Galaxy.jpeg",
+                Price = 100, Image = $"{baseUrl}/images/b7c0ee8b-97a4-4928-bfc2-ae7a7ea9c5e5.jpeg",
                 Category = categories.Find(c => c.NormalizedName.Equals("fantasy"))
             },
             new Book
@@ -76,7 +76,7 @@ public static class DbInitializer
                 Id = 2, Title = "Приключения Шерлока Холмса",
                 Author = "Артур Конан Дойл",
                 Description = "Гениальный сыщик решает запутанные головоломки",
-                Price = 150, Image = $"{baseUrl}/Images/The-Adventure-of-Sherlock-Holmes.jpeg",
+                Price = 150, Image = $"{baseUrl}/images/ba069570-fe3a-47d8-b6eb-98bf259707c2.jpeg",
                 Category = categories.Find(c => c.NormalizedName.Equals("detective"))
             },
             new Book
@@ -84,7 +84,7 @@ public static class DbInitializer
                 Id = 3, Title = "Остров Сокровищ",
                 Author = "Роберт Льюис Стивенсон",
                 Description = "Поиски пиратского клада, полные опасностей",
-                Price = 120, Image = $"{baseUrl}/Images/Treasure-Island.jpeg",
+                Price = 120, Image = $"{baseUrl}/images/Treasure-Island.jpeg",
                 Category = categories.Find(c => c.NormalizedName.Equals("adventure"))
             },
             new Book
@@ -92,7 +92,7 @@ public static class DbInitializer
                 Id = 4, Title = "Анна Каренина",
                 Author = "Лев Толстой",
                 Description = "Трагическая любовь замужней дамы в высшем свете",
-                Price = 200, Image = $"{baseUrl}/Images/Anna-Carenina.png",
+                Price = 200, Image = $"{baseUrl}/images/Anna-Carenina.png",
                 Category = categories.Find(c => c.NormalizedName.Equals("romance"))
             },
             new Book
@@ -100,7 +100,7 @@ public static class DbInitializer
                 Id = 5, Title = "Дракула",
                 Author = "Брэм Стокер",
                 Description = "Классическая история о самом известном вампире",
-                Price = 300, Image = $"{baseUrl}/Images/Dracula.jpeg",
+                Price = 300, Image = $"{baseUrl}/images/Dracula.jpeg",
                 Category = categories.Find(c => c.NormalizedName.Equals("horror"))
             },
             new Book
@@ -108,7 +108,7 @@ public static class DbInitializer
                 Id = 6, Title = "Мастер и Маргарита",
                 Author = "Михаил Булгаков",
                 Description = "Визит дьявола в Москву 1930-х годов",
-                Price = 500, Image = $"{baseUrl}/Images/Master-and-Margarita.jpeg",
+                Price = 500, Image = $"{baseUrl}/images/Master-and-Margarita.jpeg",
                 Category = categories.Find(c => c.NormalizedName.Equals("mysticism"))
             }
         };

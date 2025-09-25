@@ -1,7 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WEB_353503_Sebelev.API.Data;
 using WEB_353503_Sebelev.API.EndPoints;
+using WEB_353503_Sebelev.API.Models;
 using WEB_353503_Sebelev.API.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,27 @@ builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetListOfBooksHandler).Assembly));
 
+var authServer = builder.Configuration
+    .GetSection("AuthServer")
+    .Get<AuthServerData>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o =>
+    {
+        o.MetadataAddress = $"{authServer.Host}/realms/{authServer.Realm}/.well-known/openid-configuration";
+
+        o.Authority = $"{authServer.Host}/realms/{authServer.Realm}";
+
+        o.Audience = "account";
+
+        o.RequireHttpsMetadata = false;
+    });
+
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("admin", p => p.RequireRole("POWER-USER"));
+});
+
 var app = builder.Build();
 
 await DbInitializer.SeedData(app);
@@ -26,6 +48,9 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

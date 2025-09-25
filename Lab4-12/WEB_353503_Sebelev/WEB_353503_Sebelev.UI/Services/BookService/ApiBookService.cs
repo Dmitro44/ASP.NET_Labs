@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using WEB_353503_Sebelev.Domain.Entities;
 using WEB_353503_Sebelev.Domain.Models;
+using WEB_353503_Sebelev.UI.Services.Authentication;
 
 namespace WEB_353503_Sebelev.UI.Services.BookService;
 
@@ -11,11 +12,13 @@ public class ApiBookService : IBookService
     private readonly string _pageSize;
     private readonly JsonSerializerOptions _serializerOptions;
     private readonly ILogger<ApiBookService> _logger;
+    private readonly ITokenAccessor _tokenAccessor;
 
     public ApiBookService(
         HttpClient httpClient,
         IConfiguration configuration,
-        ILogger<ApiBookService> logger)
+        ILogger<ApiBookService> logger, 
+        ITokenAccessor tokenAccessor)
     {
         _httpClient = httpClient;
         _pageSize = configuration.GetSection("ItemsPerPage").Value;
@@ -24,6 +27,7 @@ public class ApiBookService : IBookService
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         };
         _logger = logger;
+        _tokenAccessor = tokenAccessor;
     }
     
     public async Task<ResponseData<ListModel<Book>>> GetBookListAsync(string? categoryNormalizedSize, int pageNo = 1)
@@ -52,6 +56,15 @@ public class ApiBookService : IBookService
         if (queryParams.Count > 0)
         {
             urlString.Append($"?{string.Join("&", queryParams)}");
+        }
+
+        try
+        {
+            await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient, false);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError($"Объект не добавлен. Error: {e.Message}");
         }
         
         var response = await _httpClient.GetAsync(new Uri(urlString.ToString()));
@@ -87,6 +100,16 @@ public class ApiBookService : IBookService
         if (!urlString.ToString().EndsWith('/')) urlString.Append('/');
         
         urlString.Append($"{id}");
+
+        try
+        {
+            await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient, false);
+        }
+        catch (Exception e)
+        {
+            return ResponseData<Book?>
+                .Error($"Объект не добавлен. Error: {e.Message}");
+        }
         
         var response = await _httpClient.GetAsync(new Uri(urlString.ToString()));
 
@@ -134,6 +157,16 @@ public class ApiBookService : IBookService
         content.Add(data, "book");
 
         request.Content = content;
+        
+        try
+        {
+            await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient, false);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Объект не добавлен. Error: {EMessage}", e.Message);
+        }
+        
         var response = await _httpClient.SendAsync(
             request,
             CancellationToken.None);
@@ -156,6 +189,15 @@ public class ApiBookService : IBookService
             Method = HttpMethod.Delete,
             RequestUri = new Uri($"{_httpClient.BaseAddress}/{id}"),
         };
+
+        try
+        {
+            await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient, false);
+        }
+        catch (Exception e)
+        { 
+            _logger.LogError($"Объект не добавлен. Error: {e.Message}");
+        }
         
         var response = await _httpClient.SendAsync(requst, CancellationToken.None);
 
@@ -191,6 +233,17 @@ public class ApiBookService : IBookService
         content.Add(data, "book");
 
         request.Content = content;
+
+        try
+        {
+            await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient, false);
+        }
+        catch (Exception e)
+        {
+            return ResponseData<Book>
+                .Error($"Объект не добавлен. Error: {e.Message}");
+        }
+        
         var response = await _httpClient.SendAsync(
             request,
             CancellationToken.None);

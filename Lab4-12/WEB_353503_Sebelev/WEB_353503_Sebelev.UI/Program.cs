@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using WEB_353503_Sebelev.UI.Extensions;
+using WEB_353503_Sebelev.UI.HelperClasses;
 using WEB_353503_Sebelev.UI.Services.BookCategoryService;
 using WEB_353503_Sebelev.UI.Services.BookService;
 
@@ -15,6 +19,7 @@ public class Program
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
         builder.RegisterCustomServices();
+        builder.Services.AddHttpContextAccessor();
 
         builder.Services.Configure<UriData>(builder.Configuration.GetSection("UriData"));
 
@@ -35,6 +40,36 @@ public class Program
             {
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
             });
+        
+        var keycloakData = builder.Configuration
+            .GetSection("Keycloak")
+            .Get<KeycloakData>();
+
+        builder.Services
+            .AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = "keycloak";
+            })
+            .AddCookie()
+            .AddOpenIdConnect("keycloak", options =>
+            {
+                options.Authority = $"{keycloakData.Host}/auth/realms/{keycloakData.Realm}";
+                options.ClientId = keycloakData.ClientId;
+                options.ClientSecret = keycloakData.ClientSecret;
+                options.ResponseType = OpenIdConnectResponseType.Code;
+                options.Scope.Add("openid");
+                options.SaveTokens = true;
+                options.RequireHttpsMetadata = false;
+                options.MetadataAddress =
+                    $"{keycloakData.Host}/realms/{keycloakData.Realm}/.well-known/openid-configuration";
+            });
+        
+        builder.Services
+            .AddAuthorization(opt =>
+            {
+                opt.AddPolicy("admin",p => p.RequireRole("POWER-USER"));
+            });
 
         var app = builder.Build();
 
@@ -46,7 +81,7 @@ public class Program
             app.UseHsts();
         }
 
-        app.MapRazorPages();
+        app.MapRazorPages().RequireAuthorization("admin");
 
         app.UseHttpsRedirection();
         app.UseRouting();
