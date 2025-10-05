@@ -31,7 +31,7 @@ public class KeycloakAuthService(
         
         var avatarUrl = "/images/default-profile-image.png";
 
-        if (avatar != null)
+        if (avatar is not null)
         {
             avatarUrl = await fileService.SaveFileAsync(avatar);
         }
@@ -71,8 +71,8 @@ internal class CreateUserModel
     public Dictionary<string, string> Attributes { get; set; } = new();
     public string Username { get; set; }
     public string Email { get; set; }
-    public bool Enabled { get; set; }
-    public bool EmailVerified { get; set; }
+    public bool Enabled { get; set; } = true;
+    public bool EmailVerified { get; set; } = true;
     public List<UserCredentials> Credentials { get; set; } = new();
 }
 

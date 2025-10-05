@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using WEB_353503_Sebelev.UI.Models;
 using WEB_353503_Sebelev.UI.Services.Authentication;
@@ -34,10 +36,19 @@ public class AccountController(KeycloakAuthService service) : Controller
 
       return View(model);
    }
-   
-   
-   public IActionResult LogOut()
+
+   public async Task Login()
    {
-      return View();
+      await HttpContext.ChallengeAsync(
+         "keycloak", 
+         new AuthenticationProperties { RedirectUri = Url.Action("Index", "Home") });
+   }
+   
+   [HttpPost]
+   public async Task LogOut()
+   {
+      await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+      await HttpContext.SignOutAsync("keycloak",
+         new AuthenticationProperties { RedirectUri = Url.Action("Index", "Home") });
    }
 }

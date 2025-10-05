@@ -18,6 +18,6 @@ public static class HostingExtensions
         builder.Services.AddHttpClient<ITokenAccessor, KeycloakTokenAccessor>();
 
         builder.Services.AddScoped<KeycloakAuthService>();
-        builder.Services.AddScoped<IFileService, LocalFileService>();
+        builder.Services.AddScoped<IFileService, ApiFileService>();
     }
 }

@@ -58,5 +58,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.MapBookEndpoints();
+app.MapFileEndpoints();
 
 app.Run();

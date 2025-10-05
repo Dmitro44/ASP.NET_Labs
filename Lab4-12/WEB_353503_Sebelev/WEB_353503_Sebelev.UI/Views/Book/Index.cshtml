@@ -7,9 +7,6 @@
 
 <html>
 <body>
-<p>
-     <a asp-action="Create">Create New</a>
-</p>
 <div class="row mt-4">
     <div class="col-md-2">
         <ul class="nav">
@@ -74,7 +71,7 @@
         </li>
         @for (int i = 1; i <= Model.Books.TotalPages; ++i)
         {
-            <li class="page-item">
+            <li class="page-item @(Model.Books.CurrentPage == i ? "active" : "")">
                 <a class="page-link" 
                    asp-action="Index"
                    asp-route-pageNo="@(i)"

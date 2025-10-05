@@ -6,6 +6,7 @@ using WEB_353503_Sebelev.UI.Extensions;
 using WEB_353503_Sebelev.UI.HelperClasses;
 using WEB_353503_Sebelev.UI.Services.BookCategoryService;
 using WEB_353503_Sebelev.UI.Services.BookService;
+using WEB_353503_Sebelev.UI.Services.FileService;
 
 namespace WEB_353503_Sebelev.UI;
 
@@ -34,8 +35,16 @@ public class Program
             {
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
             });
+        
         builder.Services.AddHttpClient<IBookService, ApiBookService>(opt
                 => opt.BaseAddress = new Uri(apiUri + "Book"))
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+            });
+        
+        builder.Services.AddHttpClient<IFileService, ApiFileService>(opt
+                => opt.BaseAddress = new Uri(apiUri + "File"))
             .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 <div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -27,7 +27,7 @@
         </nav>
     </div>
 </header>
-<main class="container">
+<main class="container flex-grow-1">
     @RenderBody()
 </main>
 <footer>
