@@ -67,32 +67,10 @@
     </tbody>
 </table>
 
-<ul class="pagination">
-    <li class="page-item">
-        <a class="page-link @(Model.Books.CurrentPage == 1 ? "disabled" : "")"
-           aria-label="Previous"
-           asp-page="/Index"
-           asp-route-pageNo="@(Model.Books.CurrentPage - 1)"
-        >
-            <span aria-hidden="true">&laquo;</span> 
-        </a>
-    </li>
-    @for (int i = 1; i <= Model.Books.TotalPages; ++i)
-    {
-        <li class="page-item">
-            <a class="page-link" 
-               asp-page="/Index"
-               asp-route-pageNo="@(i)">@(i)</a>
-        </li>
-    }
-    <li class="page-item">
-        <a class="page-link @(Model.Books.CurrentPage == Model.Books.TotalPages ? "disabled" : "")"
-           aria-label="Next"
-           asp-page="/Index"
-           asp-route-pageNo="@(Model.Books.CurrentPage + 1)">
-            <span aria-hidden="true">&raquo;</span>
-        </a>
-    </li>
-</ul>
+<pager current-page="@Model.Books.CurrentPage"
+       total-pages="@Model.Books.TotalPages"
+       admin="true">
+</pager>
+
 </body>
 </html>

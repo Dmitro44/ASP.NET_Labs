@@ -1,0 +1,30 @@
+@model WEB_353503_Sebelev.UI.ViewModels.BookListViewModel 
+
+@{
+    var request = ViewContext.HttpContext.Request;
+    var returnUrl = request.Path + request.QueryString.ToUriComponent();
+}
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var item in Model.Books.Items)
+    {
+        <div class="col">
+            <div class="card h-100">
+                <img src="@item.Image" class="card-img-top" style="height: 550px; object-fit: fill;" alt="@item.Id">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Title</h5>
+                    <p class="card-text">@item.Description</p>
+                    <div class="badge text-bg-secondary">@item.Price тугриков</div>
+                </div>
+                <div class="card-footer text-center">
+                    <a asp-controller="Cart" asp-action="Add" asp-route-id="@item.Id" asp-route-returnurl="@returnUrl" class="btn btn-primary">Add to Cart</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+    
+<pager current-page="@Model.Books.CurrentPage"
+       total-pages="@Model.Books.TotalPages"></pager>
+
+

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WEB_353503_Sebelev.Domain.Entities;
 using WEB_353503_Sebelev.Domain.Models;
+using WEB_353503_Sebelev.UI.Extensions;
 using WEB_353503_Sebelev.UI.Services.BookCategoryService;
 using WEB_353503_Sebelev.UI.Services.BookService;
 using WEB_353503_Sebelev.UI.ViewModels;
@@ -40,6 +41,9 @@ public class BookController : Controller
             Books = productResponse.Data, 
             Categories = categoryList.Data
         };
+
+        if (Request.IsAjaxRequest())
+            return PartialView("_BookListPartial", bookListViewModel);
         
         return View(bookListViewModel);
     }
