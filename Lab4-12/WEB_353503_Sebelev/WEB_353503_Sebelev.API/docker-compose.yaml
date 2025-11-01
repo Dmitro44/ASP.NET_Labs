@@ -15,6 +15,18 @@
     networks:
       - postgres_network
   
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - postgres_network
+    restart: unless-stopped
+    
+  
   pgadmin:
     image: dpage/pgadmin4:9.4.0
     container_name: pgadmin4
@@ -53,6 +65,8 @@
     
 volumes:
   postgres_data:
+    driver: local
+  redis_data:
     driver: local
 
 networks:

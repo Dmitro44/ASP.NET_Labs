@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using WEB_353503_Sebelev.UI.Extensions;
@@ -17,10 +16,14 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
+        builder.Services.AddSession();
+        builder.Services.AddDistributedMemoryCache();
+        
+        builder.Services.AddHttpContextAccessor();
+        builder.RegisterCustomServices(); 
+        
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
-        builder.RegisterCustomServices();
-        builder.Services.AddHttpContextAccessor();
 
         builder.Services.Configure<UriData>(builder.Configuration.GetSection("UriData"));
 
@@ -91,6 +94,8 @@ public class Program
         }
 
         app.MapRazorPages().RequireAuthorization("admin");
+
+        app.UseSession();
 
         app.UseHttpsRedirection();
         app.UseRouting();

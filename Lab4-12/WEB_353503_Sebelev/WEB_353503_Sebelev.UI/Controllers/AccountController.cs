@@ -50,5 +50,7 @@ public class AccountController(KeycloakAuthService service) : Controller
       await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
       await HttpContext.SignOutAsync("keycloak",
          new AuthenticationProperties { RedirectUri = Url.Action("Index", "Home") });
+      
+      HttpContext.Session.Clear();
    }
 }

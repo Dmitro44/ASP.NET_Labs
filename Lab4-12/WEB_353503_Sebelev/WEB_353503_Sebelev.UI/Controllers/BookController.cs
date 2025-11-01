@@ -19,6 +19,8 @@ public class BookController : Controller
         _bookService = bookService;
     }
 
+    [HttpGet]
+    [Route("Catalog/{category?}")]
     public async Task<IActionResult> Index(string? category, int pageNo = 1)
     {
         var productResponse = await _bookService.GetBookListAsync(category, pageNo);

@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Hybrid;
 using WEB_353503_Sebelev.API.Data;
 using WEB_353503_Sebelev.API.UseCases;
 using WEB_353503_Sebelev.Domain.Entities;
@@ -16,12 +17,17 @@ public static class BookEndpoints
     {
         var group = routes.MapGroup("/api/Book")
             .WithTags(nameof(Book))
-            .DisableAntiforgery()
-            .RequireAuthorization("admin");
+            .DisableAntiforgery();
 
-        group.MapGet("/{category:alpha?}", async (IMediator mediator, string? category, int pageNo = 1) =>
-        {
-            var data = await mediator.Send(new GetListOfBooks(category, pageNo));
+        group.MapGet("/{category:alpha?}", async (IMediator mediator, HybridCache hybridCache, string? category, int pageNo = 1) =>
+            {
+                var data = await hybridCache.GetOrCreateAsync($"dishes_{category}_{pageNo}",
+                    async token => await mediator.Send(new GetListOfBooks(category, pageNo)),
+                    options: new HybridCacheEntryOptions
+                    {
+                        Expiration = TimeSpan.FromMinutes(1),
+                        LocalCacheExpiration = TimeSpan.FromSeconds(30)
+                    });
             return TypedResults.Ok(data);
         })
         .WithName("GetAllBooks")
@@ -96,8 +102,6 @@ public static class BookEndpoints
                 newBook.Image = await mediator.Send(new SaveImage(file));
             }
 
-            newBook.Id = null;
-        
             db.Books.Add(newBook);
             await db.SaveChangesAsync();
             return TypedResults.Created($"/api/Book/{newBook.Id}", newBook);

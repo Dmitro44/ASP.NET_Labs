@@ -59,7 +59,7 @@ namespace WEB_353503_Sebelev.UI.Areas.Admin.Pages
                 return Page();
             }
 
-            await _bookService.UpdateBookAsync(Book.Id.Value, Book, Image);
+            await _bookService.UpdateBookAsync(Book.Id, Book, Image);
 
             return RedirectToPage("./Index");
         }

@@ -23,37 +23,31 @@ public static class DbInitializer
         {
             new Category
             {
-                Id = 1,
                 Name = "Фантастика",
                 NormalizedName = "fantasy"
             },
             new Category
             {
-                Id = 2,
                 Name = "Детектив",
                 NormalizedName = "detective"
             },
             new Category
             {
-                Id = 3,
                 Name = "Приключение",
                 NormalizedName = "adventure"
             },
             new Category
             {
-                Id = 4,
                 Name = "Романтика",
                 NormalizedName = "romance"
             },
             new Category
             {
-                Id = 5,
                 Name = "Ужасы",
                 NormalizedName = "horror"
             },
             new Category
             {
-                Id = 6,
                 Name = "Мистика",
                 NormalizedName = "mysticism"
             }
@@ -65,7 +59,7 @@ public static class DbInitializer
         {
             new Book
             {
-                Id = 1, Title = "Автостопом по галактике",
+                Title = "Автостопом по галактике",
                 Description = "Комическое путешествие по космосу после гибели Земли",
                 Author = "Дуглас Адамс",
                 Price = 100, Image = $"{baseUrl}/images/b7c0ee8b-97a4-4928-bfc2-ae7a7ea9c5e5.jpeg",
@@ -73,7 +67,7 @@ public static class DbInitializer
             },
             new Book
             {
-                Id = 2, Title = "Приключения Шерлока Холмса",
+                Title = "Приключения Шерлока Холмса",
                 Author = "Артур Конан Дойл",
                 Description = "Гениальный сыщик решает запутанные головоломки",
                 Price = 150, Image = $"{baseUrl}/images/ba069570-fe3a-47d8-b6eb-98bf259707c2.jpeg",
@@ -81,7 +75,7 @@ public static class DbInitializer
             },
             new Book
             {
-                Id = 3, Title = "Остров Сокровищ",
+                Title = "Остров Сокровищ",
                 Author = "Роберт Льюис Стивенсон",
                 Description = "Поиски пиратского клада, полные опасностей",
                 Price = 120, Image = $"{baseUrl}/images/Treasure-Island.jpeg",
@@ -89,7 +83,7 @@ public static class DbInitializer
             },
             new Book
             {
-                Id = 4, Title = "Анна Каренина",
+                Title = "Анна Каренина",
                 Author = "Лев Толстой",
                 Description = "Трагическая любовь замужней дамы в высшем свете",
                 Price = 200, Image = $"{baseUrl}/images/Anna-Carenina.png",
@@ -97,7 +91,7 @@ public static class DbInitializer
             },
             new Book
             {
-                Id = 5, Title = "Дракула",
+                Title = "Дракула",
                 Author = "Брэм Стокер",
                 Description = "Классическая история о самом известном вампире",
                 Price = 300, Image = $"{baseUrl}/images/Dracula.jpeg",
@@ -105,7 +99,7 @@ public static class DbInitializer
             },
             new Book
             {
-                Id = 6, Title = "Мастер и Маргарита",
+                Title = "Мастер и Маргарита",
                 Author = "Михаил Булгаков",
                 Description = "Визит дьявола в Москву 1930-х годов",
                 Price = 500, Image = $"{baseUrl}/images/Master-and-Margarita.jpeg",

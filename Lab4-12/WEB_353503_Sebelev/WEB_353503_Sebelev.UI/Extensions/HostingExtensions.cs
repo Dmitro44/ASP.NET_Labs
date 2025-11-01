@@ -1,7 +1,9 @@
+using WEB_353503_Sebelev.Domain.Entities;
 using WEB_353503_Sebelev.UI.HelperClasses;
 using WEB_353503_Sebelev.UI.Services.Authentication;
 using WEB_353503_Sebelev.UI.Services.BookCategoryService;
 using WEB_353503_Sebelev.UI.Services.BookService;
+using WEB_353503_Sebelev.UI.Services.CartService;
 using WEB_353503_Sebelev.UI.Services.FileService;
 
 namespace WEB_353503_Sebelev.UI.Extensions;
@@ -19,5 +21,6 @@ public static class HostingExtensions
 
         builder.Services.AddScoped<KeycloakAuthService>();
         builder.Services.AddScoped<IFileService, ApiFileService>();
+        builder.Services.AddScoped<Cart, SessionCart>();
     }
 }

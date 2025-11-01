@@ -24,4 +24,8 @@
       <ProjectReference Include="..\WEB_353503_Sebelev.Domain\WEB_353503_Sebelev.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Views\Cart\" />
+    </ItemGroup>
+
 </Project>
