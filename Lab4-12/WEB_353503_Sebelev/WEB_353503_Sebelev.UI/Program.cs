@@ -6,6 +6,8 @@ using WEB_353503_Sebelev.UI.HelperClasses;
 using WEB_353503_Sebelev.UI.Services.BookCategoryService;
 using WEB_353503_Sebelev.UI.Services.BookService;
 using WEB_353503_Sebelev.UI.Services.FileService;
+using Serilog;
+using WEB_353503_Sebelev.UI.Middleware;
 
 namespace WEB_353503_Sebelev.UI;
 
@@ -14,6 +16,11 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(builder.Configuration)
+            .CreateLogger();
+
+        builder.Host.UseSerilog();
 
         // Add services to the container.
         builder.Services.AddSession();
@@ -92,6 +99,8 @@ public class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
+
+        app.UseMiddleware<NonSuccessResponseLoggingMiddleware>();
 
         app.MapRazorPages().RequireAuthorization("admin");
 
