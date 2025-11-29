@@ -29,7 +29,7 @@ public class KeycloakAuthService(
            return (false, e.Message); 
         }
         
-        var avatarUrl = "/images/default-profile-image.png";
+        var avatarUrl = "/images/default_profile.png";
 
         if (avatar is not null)
         {

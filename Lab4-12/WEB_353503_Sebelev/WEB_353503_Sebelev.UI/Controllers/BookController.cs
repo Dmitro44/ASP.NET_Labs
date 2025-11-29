@@ -23,20 +23,21 @@ public class BookController : Controller
     [Route("Catalog/{category?}")]
     public async Task<IActionResult> Index(string? category, int pageNo = 1)
     {
-        var productResponse = await _bookService.GetBookListAsync(category, pageNo);
         var categoryList = await _bookCategoryService.GetCategoryListAsync();
+        if (!categoryList.Successfull)
+            return NotFound(categoryList.ErrorMessage);
+        
+        var productResponse = await _bookService.GetBookListAsync(category, pageNo);
         if (!productResponse.Successfull)
-        {
             return NotFound(productResponse.ErrorMessage);
-        }
-
-        ViewData["currentNormalizedCategory"] = category;
 
         if (category != null)
         {
             var currentCategory = categoryList.Data.Find(c => c.NormalizedName == category);
             ViewData["currentCategory"] = currentCategory.Name;
         }
+
+        ViewData["currentCategory"] = category;
 
         var bookListViewModel = new BookListViewModel
         {

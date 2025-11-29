@@ -18,7 +18,10 @@ public class GetListOfBooksHandler(AppDbContext db) :
     
     public async Task<ResponseData<ListModel<Book>>> Handle(GetListOfBooks request, CancellationToken cancellationToken)
     {
-        var pageSize = request.PageSize > _maxPageSize ? _maxPageSize : request.PageSize;
+        if (request.PageSize > _maxPageSize)
+            return ResponseData<ListModel<Book>>.Error("Page size exceeds max page size");
+
+        var pageSize = request.PageSize;
 
         var query = db.Books
             .Include(b => b.Category)
@@ -34,7 +37,7 @@ public class GetListOfBooksHandler(AppDbContext db) :
 
        if (currentPage > totalPages && totalPages > 0)
        {
-           currentPage = totalPages;
+           return ResponseData<ListModel<Book>>.Error("Page out of range");
        }
 
        if (currentPage <= 0)

@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEB_353503_Sebelev.Domain",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEB_353503_Sebelev.API", "WEB_353503_Sebelev.API\WEB_353503_Sebelev.API.csproj", "{A392E6DD-A825-4A2B-8ECF-A62CF680661B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEB_353503_Sebelev.Tests", "WEB_353503_Sebelev.Tests\WEB_353503_Sebelev.Tests.csproj", "{B4DB2E78-E358-4B10-8DA5-40DB7106222D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{A392E6DD-A825-4A2B-8ECF-A62CF680661B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A392E6DD-A825-4A2B-8ECF-A62CF680661B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A392E6DD-A825-4A2B-8ECF-A62CF680661B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4DB2E78-E358-4B10-8DA5-40DB7106222D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4DB2E78-E358-4B10-8DA5-40DB7106222D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4DB2E78-E358-4B10-8DA5-40DB7106222D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4DB2E78-E358-4B10-8DA5-40DB7106222D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
