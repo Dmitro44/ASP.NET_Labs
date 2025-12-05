@@ -21,7 +21,7 @@ public static class BookEndpoints
 
         group.MapGet("/{category:alpha?}", async (IMediator mediator, HybridCache hybridCache, string? category, int pageNo = 1) =>
             {
-                var data = await hybridCache.GetOrCreateAsync($"dishes_{category}_{pageNo}",
+                var data = await hybridCache.GetOrCreateAsync($"books_{category}_{pageNo}",
                     async token => await mediator.Send(new GetListOfBooks(category, pageNo)),
                     options: new HybridCacheEntryOptions
                     {
