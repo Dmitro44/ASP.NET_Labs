@@ -7,6 +7,18 @@ using WEB_353503_Sebelev.API.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options. AddPolicy("AllowBlazor", policy =>
+    {
+        policy
+            .WithOrigins("https://localhost:7099")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
+
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
