@@ -84,8 +84,9 @@ public class DataService : IDataService
 
                 if (result.Successfull)
                 {
-                    DataLoaded?.Invoke();
                     Books = result.Data;
+                    DataLoaded?.Invoke();
+                    return;
                 }
             }
             catch(JsonException ex)
@@ -94,6 +95,7 @@ public class DataService : IDataService
                
                 Success = false;
                 ErrorMessage = $"Error: {ex.Message}";
+                return;
             }
         }
         
@@ -121,8 +123,9 @@ public class DataService : IDataService
 
                 if (result.Successfull)
                 {
-                    DataLoaded?.Invoke();
                     Categories = result.Data;
+                    DataLoaded?.Invoke();
+                    return;
                 }
             }
             catch (JsonException ex)
@@ -131,6 +134,7 @@ public class DataService : IDataService
             
                 Success = false;
                 ErrorMessage = $"Error: {ex.Message}";
+                return;
             }
         }
     

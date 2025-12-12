@@ -28,8 +28,7 @@
                     
                     <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
                         <li>
-                            <a class="dropdown-item @(DataService.SelectedCategory == null ? "active" : "")" 
-                               href="#" 
+                            <a class="dropdown-item-text @(DataService.SelectedCategory == null ? "active" : "")" 
                                @onclick="@((e) => HandleSelectCategory(null, e))">
                                 Все категории
                             </a>
@@ -41,7 +40,6 @@
                             <li>
                                 <a 
                                     class="dropdown-item @(DataService.SelectedCategory?. Id == category.Id ? "active" : "")" 
-                                    href="#" 
                                     @onclick="@((e) => HandleSelectCategory(category, e))">
                                     @category.Name
                                 </a>

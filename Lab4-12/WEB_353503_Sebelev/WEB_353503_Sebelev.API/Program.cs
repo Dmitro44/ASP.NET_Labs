@@ -14,8 +14,8 @@ builder.Services.AddCors(options =>
         policy
             .WithOrigins("https://localhost:7099")
             .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials();
+            .AllowAnyHeader();
+        // .AllowCredentials();
     });
 });
 
@@ -67,6 +67,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseCors("AllowBlazor");
 
 app.UseAuthentication();
 app.UseAuthorization();

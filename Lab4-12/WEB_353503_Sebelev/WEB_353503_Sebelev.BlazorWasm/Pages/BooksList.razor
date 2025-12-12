@@ -1,21 +1,26 @@
 @inject IDataService DataService
 @implements IDisposable
 
-
-<div class="row row-cols-1 row-cols-md-3 g-4">
+@if (DataService.Books.Items is null)
+{
+    <div class="alert alert-info" role="alert">
+        <p>Книги не загружены</p>
+    </div>   
+}
+else
+{
     <table>
         <th>Name</th>
         <th>Description</th>
-        <tr>
             @foreach (var item in DataService.Books.Items)
             {
-                <td>@item.Title</td>
-                <td>@item.Description</td>
-            }            
-        </tr>
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Description</td>
+                </tr>
+            }
     </table>
-    
-</div>
+}
 
 @code {
     protected override void OnInitialized()
