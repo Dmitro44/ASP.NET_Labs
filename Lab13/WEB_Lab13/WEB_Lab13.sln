@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEB_Lab13.UI", "WEB_Lab13.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEB_Lab13.Core", "WEB_Lab13.Core\WEB_Lab13.Core.csproj", "{8422C3B7-C243-415D-93BC-3A68913812DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEB_Lab13.API", "WEB_Lab13.API\WEB_Lab13.API.csproj", "{81591FC5-57FC-4E4C-B1E1-FB4CB60F0A6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{8422C3B7-C243-415D-93BC-3A68913812DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8422C3B7-C243-415D-93BC-3A68913812DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8422C3B7-C243-415D-93BC-3A68913812DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81591FC5-57FC-4E4C-B1E1-FB4CB60F0A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81591FC5-57FC-4E4C-B1E1-FB4CB60F0A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81591FC5-57FC-4E4C-B1E1-FB4CB60F0A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81591FC5-57FC-4E4C-B1E1-FB4CB60F0A6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
