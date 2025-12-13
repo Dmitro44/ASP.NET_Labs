@@ -1,0 +1,54 @@
+@page "/register"
+@using WEB_Lab13.UI.Services.Auth
+@inject AuthService AuthService
+@inject NavigationManager Navigation
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <h3 class="text-center mb-4">Регистрация</h3>
+        @if (!string.IsNullOrEmpty(Error))
+        {
+            <div class="alert alert-danger">@Error</div>
+        }
+        <EditForm Model="@registerModel" OnValidSubmit="HandleRegister">
+            <div class="form-group mb-3">
+                <InputText @bind-Value="registerModel.Username" class="form-control" placeholder="Имя пользователя" />
+            </div>
+            <div class="form-group mb-3">
+                <InputText @bind-Value="registerModel.DisplayName" class="form-control" placeholder="Отображаемое имя"/>
+            </div>
+            <div class="form-group mb-3">
+                <InputText @bind-Value="registerModel.Password" class="form-control" type="password" placeholder="Пароль"/>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
+        </EditForm>
+        <div class="text-center mt-3">
+            <a href="/login">Уже есть аккаунт? Войти</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    public class RegisterModel
+    {
+        public string Username { get; set; }
+        public string DisplayName { get; set; }
+        public string Password { get; set; }
+    }
+    RegisterModel registerModel = new();
+    string Error;
+
+    async Task HandleRegister()
+    {
+        Error = null;
+        var ok = await AuthService.Register(registerModel.Username, registerModel.DisplayName, registerModel.Password);
+        if (ok)
+        {
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            Error = "Ошибка регистрации. Проверьте данные.";
+        }
+    }
+}

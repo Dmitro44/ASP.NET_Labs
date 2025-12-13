@@ -1,0 +1,50 @@
+@page "/login"
+@using WEB_Lab13.UI.Services.Auth
+@inject AuthService AuthService
+@inject NavigationManager Navigation
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <h3 class="text-center mb-4">Вход</h3>
+        @if (!string.IsNullOrEmpty(Error))
+        {
+            <div class="alert alert-danger">@Error</div>
+        }
+        <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+            <div class="form-group mb-3">
+                <InputText @bind-Value="loginModel.Username" class="form-control" placeholder="Имя пользователя"/>
+            </div>
+            <div class="form-group mb-3">
+                <InputText @bind-Value="loginModel.Password" class="form-control" type="password" placeholder="Пароль"/>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Войти</button>
+        </EditForm>
+        <div class="text-center mt-3">
+            <a href="/register">Нет аккаунта? Зарегистрироваться</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    public class LoginModel
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+    LoginModel loginModel = new();
+    string Error;
+
+    async Task HandleLogin()
+    {
+        Error = null;
+        var ok = await AuthService.Login(loginModel.Username, loginModel.Password);
+        if (ok)
+        {
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            Error = "Ошибка входа. Проверьте логин и пароль.";
+        }
+    }
+}
