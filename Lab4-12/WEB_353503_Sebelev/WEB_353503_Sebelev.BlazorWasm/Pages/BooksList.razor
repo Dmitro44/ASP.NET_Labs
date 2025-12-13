@@ -17,15 +17,24 @@ else
                 <tr>
                     <td>@item.Title</td>
                     <td>@item.Description</td>
+                    <td><button class="btn btn-info" @onclick="() => DetailsClicked(item.Id)">Подробнее</button></td>
                 </tr>
             }
     </table>
 }
 
 @code {
+    [Parameter]
+    public EventCallback<int> BookSelected { get; set; }
+    
     protected override void OnInitialized()
     {
         DataService.DataLoaded += StateHasChanged;
+    }
+
+    private async Task DetailsClicked(int selectedId)
+    {
+        await BookSelected.InvokeAsync(selectedId);
     }
 
     public void Dispose()

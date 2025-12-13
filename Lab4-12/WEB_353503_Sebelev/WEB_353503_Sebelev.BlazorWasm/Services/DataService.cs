@@ -85,6 +85,8 @@ public class DataService : IDataService
                 if (result.Successfull)
                 {
                     Books = result.Data;
+                    CurrentPage = result.Data.CurrentPage;
+                    TotalPages = result.Data.TotalPages;
                     DataLoaded?.Invoke();
                     return;
                 }

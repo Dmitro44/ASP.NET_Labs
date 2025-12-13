@@ -1,0 +1,49 @@
+@implements IDisposable
+
+<ul class="pagination mt-4">
+    <li class="page-item @(DataService.CurrentPage == 1 ? "disabled" : "")">
+        <button class="page-link"
+                @onclick="@(DataService.CurrentPage == 1 ? null : (() => SelectPage(DataService.CurrentPage - 1)))"
+                tabindex="-1"
+                aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+        </button>
+    </li>
+
+    @for (int i = 1; i <= DataService.TotalPages; i++)
+    {
+        var pageNo = i;
+        <li class="page-item @(DataService.CurrentPage == pageNo ? "active" : "")">
+            <button class="page-link"
+                    @onclick="(() => SelectPage(pageNo))">@pageNo</button>
+        </li>
+    }
+
+    <li class="page-item @(DataService.CurrentPage == DataService.TotalPages ? "disabled" : "")">
+        <button class="page-link"
+                @onclick="@(DataService.CurrentPage == DataService.TotalPages ? null : (() => SelectPage(DataService.CurrentPage + 1)))"
+                aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+        </button>
+    </li>
+</ul>
+
+@code {
+    [Inject] public IDataService DataService { get; set; }
+
+    protected override void OnInitialized()
+    {
+        DataService.DataLoaded += StateHasChanged;
+    }
+
+    private async Task SelectPage(int page)
+    {
+        await DataService.GetBookListAsync(page);
+    }
+
+    public void Dispose()
+    {
+        DataService.DataLoaded -= StateHasChanged;
+    }
+
+}

@@ -1,17 +1,28 @@
 @page "/Catalog"
 @using Microsoft.AspNetCore.Authorization
+@using WEB_353503_Sebelev.Domain.Entities
 @attribute [Authorize]
 
 <PageTitle>Books</PageTitle>
 <CategorySelector/>
-<BooksList/>
+<BooksList BookSelected="@OnBookSelected"/>
+<Pager/>
+@if (SelectedBook is not null)
+{
+    <BookDetails SelectedBook="SelectedBook"/>
+}
 
 @code {
-    [Inject]
-    public IDataService DataService { get; set; }
+    [Inject] public IDataService DataService { get; set; }
+    private Book? SelectedBook { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         await DataService.GetBookListAsync();
+    }
+
+    private void OnBookSelected(int id)
+    {
+        SelectedBook = DataService.Books.Items.FirstOrDefault(b => b.Id == id);
     }
 }

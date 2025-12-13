@@ -1,0 +1,30 @@
+<div class="card book-card" style="max-width: 540px;">
+    <div class="row g-0 align-items-center">
+        <div class="col-4">
+            @if (!string.IsNullOrWhiteSpace(SelectedBook.Image))
+            {
+                <img src="@SelectedBook.Image" class="img-fluid rounded-start" alt="@SelectedBook.Title" style="height: 220px; width: 100%; object-fit: contain; background: #fff;">
+            }
+            else
+            {
+                <div class="d-flex align-items-center justify-content-center rounded-start bg-light" style="height: 220px; width: 100%;">
+                    <span class="text-secondary">Нет изображения</span>
+                </div>
+            }
+        </div>
+        <div class="col-8">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">@SelectedBook.Title</h5>
+                <p class="card-text">@SelectedBook.Description</p>
+                <span class="badge bg-primary fs-6">
+                    @SelectedBook.Price.ToString("0.00") тугриков
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Book SelectedBook { get; set; }
+}
