@@ -31,7 +31,7 @@ public class AuthController : ControllerBase
             return BadRequest(result.Errors);
         
         var token = GenerateJwtToken(user);
-        return Ok(token);
+        return Ok(new { token });
     }
 
     [HttpPost("login")]
@@ -42,7 +42,7 @@ public class AuthController : ControllerBase
             return Unauthorized();
 
         var token = GenerateJwtToken(user);
-        return Ok(token);
+        return Ok(new { token });
     }
 
     private string GenerateJwtToken(User user)
@@ -53,7 +53,7 @@ public class AuthController : ControllerBase
             new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
         };
         
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var jwt = new JwtSecurityToken(

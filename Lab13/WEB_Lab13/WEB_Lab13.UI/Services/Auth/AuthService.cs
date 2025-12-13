@@ -24,9 +24,9 @@ public class AuthService
 
         if (response.IsSuccessStatusCode)
         {
-            var token = await response.Content.ReadFromJsonAsync<string>();
-            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", token);
-            (_authStateProvider as JwtAuthStateProvider)?.NotifyUserAuthentication(token);
+            var obj = await response.Content.ReadFromJsonAsync<TokenResponse>();
+            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", obj.Token);
+            (_authStateProvider as JwtAuthStateProvider)?.NotifyUserAuthentication(obj.Token);
             return true;
         }
         
@@ -40,9 +40,9 @@ public class AuthService
 
         if (response.IsSuccessStatusCode)
         {
-            var token = await response.Content.ReadFromJsonAsync<string>();
-            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", token);
-            (_authStateProvider as JwtAuthStateProvider)?.NotifyUserAuthentication(token);
+            var obj = await response.Content.ReadFromJsonAsync<TokenResponse>();
+            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", obj.Token);
+            (_authStateProvider as JwtAuthStateProvider)?.NotifyUserAuthentication(obj.Token);
             return true;
         }
 
@@ -54,4 +54,9 @@ public class AuthService
         await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
         (_authStateProvider as JwtAuthStateProvider)?.NotifyUserLogout();
     }
+}
+
+public class TokenResponse
+{
+    public string Token { get; set; }
 }
