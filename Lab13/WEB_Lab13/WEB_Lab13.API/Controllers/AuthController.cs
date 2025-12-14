@@ -31,7 +31,7 @@ public class AuthController : ControllerBase
             return BadRequest(result.Errors);
         
         var token = GenerateJwtToken(user);
-        return Ok(token);
+        return Ok(new { token });
     }
 
     [HttpPost("login")]
@@ -42,7 +42,7 @@ public class AuthController : ControllerBase
             return Unauthorized();
 
         var token = GenerateJwtToken(user);
-        return Ok(token);
+        return Ok(new { token });
     }
 
     private string GenerateJwtToken(User user)
