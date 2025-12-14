@@ -1,6 +1,21 @@
 ﻿@page "/authentication/{action}"
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-<RemoteAuthenticatorView Action="@Action" />
+@using WEB_Lab13.UI.Pages
+
+@switch (Action?.ToLowerInvariant())
+{
+    case "register":
+        <Register />
+        break;
+    case "login":
+        <Login />
+        break;
+    case "logout":
+        <Logout /> 
+        break;
+    default:
+        <Login /> 
+        break;
+}
 
 @code{
     [Parameter] public string? Action { get; set; }
