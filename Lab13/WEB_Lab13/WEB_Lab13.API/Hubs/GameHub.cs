@@ -21,17 +21,17 @@ public class GameHub : Hub<IGameClient>
         _logger = logger;
     }
 
-    public async Task CreateGame(string username)
+    public async Task CreateGame(string username, int playerCount)
     {
         string gameId = Guid.NewGuid().ToString();
         var players = new Dictionary<string, string> { { Context.ConnectionId, username } };
-        var game = new PigGameLogic(gameId, players);
+        var game = new PigGameLogic(gameId, players, playerCount);
         ActiveGames.TryAdd(gameId, game);
         
         await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
         PlayerGameMap.TryAdd(Context.ConnectionId, gameId);
         
-        _logger.LogInformation("Player {Username} created a new game with ID {GameId}", username, gameId);
+        _logger.LogInformation("Player {Username} created a new game with ID {GameId} for {PlayerCount} players", username, gameId, playerCount);
         
         await Clients.Caller.JoinGame(gameId);
         await Clients.Group(gameId).ReceiveGameState(game.GetState());
@@ -42,7 +42,7 @@ public class GameHub : Hub<IGameClient>
         gameId = gameId.Trim();
         if (ActiveGames.TryGetValue(gameId, out var game))
         {
-            if (game.GetState().Players.Count >= 2)
+            if (game.GetState().Players.Count >= game.GetState().MaxPlayers)
             {
                 _logger.LogWarning("Player {Username} failed to join game {GameId}: game is full", username, gameId);
                 return; 

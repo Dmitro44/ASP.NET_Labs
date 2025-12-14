@@ -11,6 +11,7 @@ namespace WEB_Lab13.Core.Logic
         public string LastRoll { get; set; } = "";
         public string StatusMessage { get; set; } = "Ожидание начала игры...";
         public bool IsGameRunning { get; set; } = false;
+        public int MaxPlayers { get; set; } = 2;
     }
 
     public class PlayerState
@@ -26,9 +27,9 @@ namespace WEB_Lab13.Core.Logic
         private readonly GameState _state;
         private readonly Random _random = new Random();
 
-        public PigGameLogic(string gameId, Dictionary<string, string> players)
+        public PigGameLogic(string gameId, Dictionary<string, string> players, int playerCount)
         {
-            _state = new GameState { GameId = gameId };
+            _state = new GameState { GameId = gameId, MaxPlayers = playerCount };
 
             foreach (var player in players)
             {
@@ -44,16 +45,22 @@ namespace WEB_Lab13.Core.Logic
             {
                 _state.CurrentPlayerIndex = _random.Next(0, _state.Players.Count);
                 _state.Players[_state.CurrentPlayerIndex].IsMyTurn = true;
-                _state.IsGameRunning = _state.Players.Count == 2;
+                _state.IsGameRunning = _state.Players.Count == _state.MaxPlayers;
                 _state.StatusMessage = _state.IsGameRunning
                     ? $"Игра началась. Ход игрока {_state.Players[_state.CurrentPlayerIndex].Username}."
-                    : "Ожидание второго игрока...";
+                    : $"Ожидание остальных игроков ({_state.Players.Count}/{_state.MaxPlayers})...";
             }
         }
 
         public GameState AddPlayer(string connectionId, string username)
         {
-            if (_state.Players.Count >= 2) return _state;
+            var existingPlayer = _state.Players.Find(p => p.Username == username);
+            if (existingPlayer != null)
+            {
+                return HandlePlayerReconnection(connectionId, username);
+            }
+            
+            if (_state.Players.Count >= _state.MaxPlayers) return _state;
 
             _state.Players.Add(new PlayerState
             {
@@ -64,10 +71,26 @@ namespace WEB_Lab13.Core.Logic
 
             _state.StatusMessage = $"Игрок {username} присоединился. ";
 
-            if (_state.Players.Count == 2)
+            if (_state.Players.Count == _state.MaxPlayers)
             {
                 _state.IsGameRunning = true;
                 _state.StatusMessage += "Игра началась!";
+            }
+            else
+            {
+                _state.StatusMessage += $"Ожидание остальных игроков ({_state.Players.Count}/{_state.MaxPlayers})...";
+            }
+
+            return _state;
+        }
+
+        public GameState HandlePlayerReconnection(string newConnectionId, string username)
+        {
+            var player = _state.Players.Find(p => p.Username == username);
+            if (player != null)
+            {
+                player.ConnectionId = newConnectionId;
+                _state.StatusMessage = $"Игрок {username} переподключился.";
             }
 
             return _state;

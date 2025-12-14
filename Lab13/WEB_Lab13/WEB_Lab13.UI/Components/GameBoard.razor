@@ -9,21 +9,18 @@
 {
     <div class="alert alert-info">
         @_gameState.StatusMessage
-        @if (!string.IsNullOrEmpty(_gameState.LastRoll))
-        {
-            <span class="badge bg-secondary">Последний бросок: @_gameState.LastRoll</span>
-        }
     </div>
-    
+
+    <Dice LastRoll="@_gameState.LastRoll" IsRolling="@_isRolling" />
+
     <div class="card p-3 mb-3">
         <h4>Очки в текущем ходу: <span class="badge bg-warning text-dark">@_gameState.TurnScore</span></h4>
     </div>
-
-    @* Кнопки доступны только текущему игроку (нужно улучшить логику сервера/PlayerState) *@
+    
     @if (IsMyTurn)
     {
-        <button class="btn btn-primary" @onclick="Roll" disabled="@(!_gameState.IsGameRunning)">Бросить</button>
-        <button class="btn btn-success" @onclick="Hold" disabled="@(_gameState.TurnScore == 0)">Стоп</button>
+        <button class="btn btn-primary" @onclick="Roll" disabled="@(!_gameState.IsGameRunning || _isRolling)">Бросить</button>
+        <button class="btn btn-success" @onclick="Hold" disabled="@(_gameState.TurnScore == 0 || _isRolling)">Стоп</button>
     }
     else
     {
@@ -60,18 +57,39 @@ else
     public GameState GameState { get; set; } = new GameState();
 
     private GameState _gameState = new GameState();
-    private bool IsMyTurn => _gameState.Players.Any(p => p.IsMyTurn && p.ConnectionId == Client.GetConnectionId()); // Нужно добавить метод GetConnectionId в GameClient
+    private GameState? _previousGameState;
+    private bool _isRolling = false;
+    private bool IsMyTurn => _gameState.Players.Any(p => p.IsMyTurn && p.ConnectionId == Client.GetConnectionId());
 
     protected override void OnInitialized()
     {
         _gameState = GameState;
+        _previousGameState = GameState;
         Client.GameStateUpdated += OnGameStateUpdated;
     }
 
-    private void OnGameStateUpdated(GameState state)
+    private async void OnGameStateUpdated(GameState newState)
     {
-        _gameState = state;
-        InvokeAsync(StateHasChanged);
+        var turnChanged = _previousGameState?.CurrentPlayerIndex != newState.CurrentPlayerIndex;
+        var hasRolled = _previousGameState?.LastRoll != newState.LastRoll && newState.LastRoll != "0 and 0";
+
+        _gameState = newState;
+
+        if (hasRolled)
+        {
+            _isRolling = true;
+            await InvokeAsync(StateHasChanged);
+            await Task.Delay(1000); // Must match animation duration
+            _isRolling = false;
+        }
+
+        if (turnChanged)
+        {
+            await Task.Delay(1500);
+        }
+
+        _previousGameState = newState;
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task Roll() => await Client.RollDice();

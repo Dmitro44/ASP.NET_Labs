@@ -23,7 +23,6 @@ public class PigGame
     {
         if (IsGameStarted || IsGameOver) return;
         
-        // Проверяем, не добавлен ли уже этот игрок
         if (Players.Any(p => p.ConnectionId == player.ConnectionId)) return;
         
         if (Players.Count < 2)

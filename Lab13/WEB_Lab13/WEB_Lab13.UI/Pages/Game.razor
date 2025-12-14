@@ -19,6 +19,10 @@
                     <label for="gameIdInput" class="form-label">ID игры (для присоединения):</label>
                     <input id="gameIdInput" type="text" class="form-control" @bind-value="_gameIdInput" placeholder="Введите ID игры" />
                 </div>
+                <div class="mb-3">
+                    <label for="playerCount" class="form-label">Количество игроков:</label>
+                    <input id="playerCount" type="number" class="form-control" min="2" max="8" @bind-value="_playerCount" />
+                </div>
                 <div class="d-grid gap-2">
                     <button class="btn btn-success" @onclick="CreateGame" disabled="@_isConnecting">Создать игру</button>
                     <button class="btn btn-primary" @onclick="JoinGame" disabled="@(string.IsNullOrWhiteSpace(_gameIdInput) || _isConnecting)">Присоединиться к игре</button>
@@ -45,6 +49,7 @@
     private string _gameId = "";
     private bool _isGameJoined = false;
     private bool _isConnecting = true;
+    private int _playerCount = 2;
     private GameState _gameState = new GameState();
 
     protected override async Task OnInitializedAsync()
@@ -67,7 +72,7 @@
 
     private async Task CreateGame()
     {
-        await Client.CreateGame(_username);
+        await Client.CreateGame(_username, _playerCount);
     }
 
     private async Task JoinGame()

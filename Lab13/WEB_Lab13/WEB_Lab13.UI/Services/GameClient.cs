@@ -47,8 +47,8 @@ public class GameClient : IAsyncDisposable
         return _hubConnection.ConnectionId;
     }
     
-    public async Task CreateGame(string username) => 
-        await _hubConnection.SendAsync("CreateGame", username);
+    public async Task CreateGame(string username, int playerCount) => 
+        await _hubConnection.SendAsync("CreateGame", username, playerCount);
 
     public async Task JoinExistingGame(string gameId, string username) => 
         await _hubConnection.SendAsync("JoinGame", gameId, username);

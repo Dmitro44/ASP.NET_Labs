@@ -1,0 +1,149 @@
+@using System.Text.RegularExpressions
+
+<div class="dice-container">
+    <div class="dice @GetRollClass1()" data-face="@_face1">
+            <div class="face front">
+                <div class="dots">
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <div class="face back">
+                <div class="dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <div class="face top">
+                <div class="dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <div class="face bottom">
+                <div class="dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <div class="face right">
+                <div class="dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <div class="face left">
+                <div class="dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+        <div class="dice @GetRollClass2()" data-face="@_face2">
+            <div class="face front">
+                <div class="dots">
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <div class="face back">
+                <div class="dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <div class="face top">
+                <div class="dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <div class="face bottom">
+                <div class="dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <div class="face right">
+                <div class="dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <div class="face left">
+                <div class="dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+</div>
+
+@code {
+    [Parameter]
+    public string LastRoll { get; set; } = "1 and 1";
+
+    [Parameter]
+    public bool IsRolling { get; set; }
+
+    private bool _isRolling = false;
+    private int _face1 = 1;
+    private int _face2 = 1;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (IsRolling && !_isRolling)
+        {
+            if (!string.IsNullOrEmpty(LastRoll))
+            {
+                ParseLastRoll();
+            }
+            _isRolling = true;
+            
+            await Task.Delay(1000); // Animation duration
+            
+            _isRolling = false;
+        }
+        else if (!IsRolling)
+        {
+             if (!string.IsNullOrEmpty(LastRoll))
+             {
+                ParseLastRoll();
+             }
+        }
+    }
+
+    private string GetRollClass1() => _isRolling ? $"is-rolling roll-{_face1}" : "";
+    private string GetRollClass2() => _isRolling ? $"is-rolling roll-{_face2}" : "";
+
+    private void ParseLastRoll()
+    {
+        var match = Regex.Match(LastRoll, @"(\d+) and (\d+)");
+        if (match.Success)
+        {
+            _face1 = int.Parse(match.Groups[1].Value);
+            _face2 = int.Parse(match.Groups[2].Value);
+            
+            _face1 = Math.Clamp(_face1, 1, 6);
+            _face2 = Math.Clamp(_face2, 1, 6);
+        }
+    }
+}

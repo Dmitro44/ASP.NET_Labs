@@ -1,0 +1,113 @@
+.dice-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    margin-bottom: 20px;
+}
+
+.dice {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+.face {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #333;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dots {
+    display: grid;
+    width: 40px;
+    height: 40px;
+    padding: 4px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background-color: black;
+    border-radius: 50%;
+    align-self: center;
+    justify-self: center;
+}
+
+.front .dots .dot:nth-child(1) { grid-column: 2; grid-row: 2; }
+
+.bottom .dots .dot:nth-child(1) { grid-column: 1; grid-row: 1; }
+.bottom .dots .dot:nth-child(2) { grid-column: 3; grid-row: 3; }
+
+.left .dots .dot:nth-child(1) { grid-column: 1; grid-row: 1; }
+.left .dots .dot:nth-child(2) { grid-column: 2; grid-row: 2; }
+.left .dots .dot:nth-child(3) { grid-column: 3; grid-row: 3; }
+
+.right .dots {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+}
+.right .dots .dot:nth-child(1) { grid-column: 1; grid-row: 1; }
+.right .dots .dot:nth-child(2) { grid-column: 2; grid-row: 1; }
+.right .dots .dot:nth-child(3) { grid-column: 1; grid-row: 2; }
+.right .dots .dot:nth-child(4) { grid-column: 2; grid-row: 2; }
+
+
+.top .dots .dot:nth-child(1) { grid-column: 1; grid-row: 1; }
+.top .dots .dot:nth-child(2) { grid-column: 3; grid-row: 1; }
+.top .dots .dot:nth-child(3) { grid-column: 2; grid-row: 2; }
+.top .dots .dot:nth-child(4) { grid-column: 1; grid-row: 3; }
+.top .dots .dot:nth-child(5) { grid-column: 3; grid-row: 3; }
+
+.back .dots {
+    grid-template-columns: repeat(2, 1fr);
+}
+.back .dots .dot:nth-child(1) { grid-column: 1; grid-row: 1; }
+.back .dots .dot:nth-child(2) { grid-column: 2; grid-row: 1; }
+.back .dots .dot:nth-child(3) { grid-column: 1; grid-row: 2; }
+.back .dots .dot:nth-child(4) { grid-column: 2; grid-row: 2; }
+.back .dots .dot:nth-child(5) { grid-column: 1; grid-row: 3; }
+.back .dots .dot:nth-child(6) { grid-column: 2; grid-row: 3; }
+
+
+.front { transform: translateZ(25px); }
+.back { transform: rotateY(180deg) translateZ(25px); }
+.right { transform: rotateY(90deg) translateZ(25px); }
+.left { transform: rotateY(-90deg) translateZ(25px); }
+.top { transform: rotateX(90deg) translateZ(25px); }
+.bottom { transform: rotateX(-90deg) translateZ(25px); }
+
+.dice[data-face="1"] { transform: rotateY(0deg); }
+.dice[data-face="2"] { transform: rotateX(90deg); }
+.dice[data-face="3"] { transform: rotateY(90deg); }
+.dice[data-face="4"] { transform: rotateY(-90deg); }
+.dice[data-face="5"] { transform: rotateX(-90deg); }
+.dice[data-face="6"] { transform: rotateY(180deg); }
+
+.dice.is-rolling {
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+.dice.roll-1 { animation-name: roll-to-1; }
+.dice.roll-2 { animation-name: roll-to-2; }
+.dice.roll-3 { animation-name: roll-to-3; }
+.dice.roll-4 { animation-name: roll-to-4; }
+.dice.roll-5 { animation-name: roll-to-5; }
+.dice.roll-6 { animation-name: roll-to-6; }
+
+@keyframes roll-to-1 { to { transform: rotateY(0deg) rotateX(720deg) rotateZ(360deg); } }
+@keyframes roll-to-2 { to { transform: rotateX(90deg) rotateY(720deg) rotateZ(360deg); } }
+@keyframes roll-to-3 { to { transform: rotateY(90deg) rotateX(720deg) rotateZ(360deg); } }
+@keyframes roll-to-4 { to { transform: rotateY(-90deg) rotateX(720deg) rotateZ(360deg); } }
+@keyframes roll-to-5 { to { transform: rotateX(-90deg) rotateY(720deg) rotateZ(360deg); } }
+@keyframes roll-to-6 { to { transform: rotateY(180deg) rotateX(720deg) rotateZ(360deg); } }
