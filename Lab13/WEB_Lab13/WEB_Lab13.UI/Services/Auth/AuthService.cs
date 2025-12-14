@@ -24,8 +24,9 @@ public class AuthService
 
         if (response.IsSuccessStatusCode)
         {
-            // FIX: Use ReadAsStringAsync() because the server returns raw text, not JSON
-            var token = await response.Content.ReadAsStringAsync();
+            var result = await response.Content.ReadFromJsonAsync<TokenDto>();
+            if (result == null || result.Token == null) return false;
+            var token = result.Token;
             
             await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", token);
             (_authStateProvider as JwtAuthStateProvider)?.NotifyUserAuthentication(token);
@@ -42,7 +43,9 @@ public class AuthService
 
         if (response.IsSuccessStatusCode)
         {
-            var token = await response.Content.ReadAsStringAsync();
+            var result = await response.Content.ReadFromJsonAsync<TokenDto>();
+            if (result == null || result.Token == null) return false;
+            var token = result.Token;
 
             await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", token);
             (_authStateProvider as JwtAuthStateProvider)?.NotifyUserAuthentication(token);

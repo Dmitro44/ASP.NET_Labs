@@ -1,0 +1,84 @@
+@* WEB_Lab13.UI/Components/GameBoard.razor *@
+@using WEB_Lab13.Core.Logic
+@inject GameClient Client
+@implements IDisposable
+
+<h3>Игра Свинья (@_gameState.GameId)</h3>
+
+@if (_gameState.IsGameRunning)
+{
+    <div class="alert alert-info">
+        @_gameState.StatusMessage
+        @if (!string.IsNullOrEmpty(_gameState.LastRoll))
+        {
+            <span class="badge bg-secondary">Последний бросок: @_gameState.LastRoll</span>
+        }
+    </div>
+    
+    <div class="card p-3 mb-3">
+        <h4>Очки в текущем ходу: <span class="badge bg-warning text-dark">@_gameState.TurnScore</span></h4>
+    </div>
+
+    @* Кнопки доступны только текущему игроку (нужно улучшить логику сервера/PlayerState) *@
+    @if (IsMyTurn)
+    {
+        <button class="btn btn-primary" @onclick="Roll" disabled="@(!_gameState.IsGameRunning)">Бросить</button>
+        <button class="btn btn-success" @onclick="Hold" disabled="@(_gameState.TurnScore == 0)">Стоп</button>
+    }
+    else
+    {
+        <p class="text-muted">Ожидание хода противника...</p>
+    }
+}
+else
+{
+    <div class="alert alert-success">@_gameState.StatusMessage</div>
+}
+
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>Игрок</th>
+            <th>Итоговый счет</th>
+            <th>Ход</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in _gameState.Players)
+        {
+            <tr class="@(player.IsMyTurn ? "table-active" : "")">
+                <td>@player.Username</td>
+                <td>@player.TotalScore</td>
+                <td>@(player.IsMyTurn ? "➡️" : "")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public GameState GameState { get; set; } = new GameState();
+
+    private GameState _gameState = new GameState();
+    private bool IsMyTurn => _gameState.Players.Any(p => p.IsMyTurn && p.ConnectionId == Client.GetConnectionId()); // Нужно добавить метод GetConnectionId в GameClient
+
+    protected override void OnInitialized()
+    {
+        _gameState = GameState;
+        Client.GameStateUpdated += OnGameStateUpdated;
+    }
+
+    private void OnGameStateUpdated(GameState state)
+    {
+        _gameState = state;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private async Task Roll() => await Client.RollDice();
+    private async Task Hold() => await Client.Hold();
+
+    public void Dispose()
+    {
+        Client.GameStateUpdated -= OnGameStateUpdated;
+    }
+}

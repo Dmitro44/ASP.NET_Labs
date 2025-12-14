@@ -1,0 +1,96 @@
+@page "/game"
+@using Microsoft.AspNetCore.Components.Authorization
+@using WEB_Lab13.UI.Components
+@using WEB_Lab13.Core.Logic
+@inject GameClient Client
+@inject IJSRuntime JSRuntime
+@implements IDisposable
+
+<PageTitle>Игра Свинья</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        @if (!_isGameJoined)
+        {
+            <div class="card p-4">
+                <h2>Присоединиться к игре или создать новую</h2>
+                <p>Вы вошли как: <b>@_username</b></p>
+                <div class="mb-3">
+                    <label for="gameIdInput" class="form-label">ID игры (для присоединения):</label>
+                    <input id="gameIdInput" type="text" class="form-control" @bind-value="_gameIdInput" placeholder="Введите ID игры" />
+                </div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-success" @onclick="CreateGame" disabled="@_isConnecting">Создать игру</button>
+                    <button class="btn btn-primary" @onclick="JoinGame" disabled="@(string.IsNullOrWhiteSpace(_gameIdInput) || _isConnecting)">Присоединиться к игре</button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <h1>Игра Свинья (@_gameId)</h1>
+            <GameBoard GameState="_gameState" />
+        }
+    </Authorized>
+    <NotAuthorized>
+        <p>Вы должны войти в систему, чтобы играть.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    private string _username = "";
+    private string _gameIdInput = "";
+    private string _gameId = "";
+    private bool _isGameJoined = false;
+    private bool _isConnecting = true;
+    private GameState _gameState = new GameState();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthenticationStateTask != null)
+        {
+            var authState = await AuthenticationStateTask;
+            var user = authState.User;
+            if (user.Identity != null && user.Identity.IsAuthenticated)
+            {
+                _username = user.Identity.Name ?? "";
+            }
+        }
+
+        await Client.StartConnection();
+        _isConnecting = false;
+        Client.GameStateUpdated += OnGameStateUpdated;
+        Client.GameJoined += OnGameJoined;
+    }
+
+    private async Task CreateGame()
+    {
+        await Client.CreateGame(_username);
+    }
+
+    private async Task JoinGame()
+    {
+        await Client.JoinExistingGame(_gameIdInput, _username);
+    }
+
+    private void OnGameStateUpdated(GameState state)
+    {
+        _gameState = state;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OnGameJoined(string gameId)
+    {
+        _gameId = gameId;
+        _isGameJoined = true;
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Client.GameStateUpdated -= OnGameStateUpdated;
+        Client.GameJoined -= OnGameJoined;
+    }
+}

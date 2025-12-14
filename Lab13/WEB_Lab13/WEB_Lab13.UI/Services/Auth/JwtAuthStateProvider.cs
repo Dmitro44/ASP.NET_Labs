@@ -16,15 +16,26 @@ public class JwtAuthStateProvider : AuthenticationStateProvider
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var token = await _js.InvokeAsync<string>("localStorage.getItem", "authToken");
-        ClaimsIdentity identity = new();
-
-        if (!string.IsNullOrEmpty(token))
+        
+        if (string.IsNullOrEmpty(token))
+        {
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+        }
+        
+        try
         {
             var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-            var jwt = handler.ReadJwtToken(token);
-            identity = new ClaimsIdentity(jwt.Claims, "jwt");
+            
+            var jwtToken = handler.ReadJwtToken(token); 
+
+            var identity = new ClaimsIdentity(jwtToken.Claims, "JwtAuth");
+            return new AuthenticationState(new ClaimsPrincipal(identity));
         }
-        return new AuthenticationState(new ClaimsPrincipal(identity));
+        catch (Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException)
+        {
+            await _js.InvokeVoidAsync("localStorage.removeItem", "authToken");
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+        }
     }
 
     public void NotifyUserAuthentication(string token) =>

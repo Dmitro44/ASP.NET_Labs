@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +11,9 @@ using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegiste
 
 namespace WEB_Lab13.API.Controllers;
 
+[ApiController]
 [Route("api/[controller]")]
+[AllowAnonymous]
 public class AuthController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
@@ -25,6 +28,10 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto model)
     {
+        if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.DisplayName) || string.IsNullOrEmpty(model.Password))
+        {
+            return BadRequest("Username, DisplayName, and Password are required.");
+        }
         var user = new User { UserName = model.Username, DisplayName = model.DisplayName };
         var result = await _userManager.CreateAsync(user, model.Password);
         if (!result.Succeeded)
@@ -35,8 +42,13 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
+    [HttpPost]
     public async Task<IActionResult> Login([FromBody] LoginDto model)
     {
+        if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
+        {
+            return Unauthorized();
+        }
         var user = await _userManager.FindByNameAsync(model.Username);
         if (user is null || !await _userManager.CheckPasswordAsync(user, model.Password))
             return Unauthorized();
@@ -47,13 +59,22 @@ public class AuthController : ControllerBase
 
     private string GenerateJwtToken(User user)
     {
-        var claims = new[]
+        var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id)
         };
+        if (user.UserName != null)
+        {
+            claims.Add(new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName));
+            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+        }
         
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
+        var jwtSecret = _configuration["Jwt:Secret"];
+        if (string.IsNullOrEmpty(jwtSecret))
+        {
+            throw new InvalidOperationException("Jwt:Secret is not configured in appsettings.json");
+        }
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var jwt = new JwtSecurityToken(

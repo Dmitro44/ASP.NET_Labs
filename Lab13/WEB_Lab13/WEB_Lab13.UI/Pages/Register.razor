@@ -31,16 +31,21 @@
 @code {
     public class RegisterModel
     {
-        public string Username { get; set; }
-        public string DisplayName { get; set; }
-        public string Password { get; set; }
+        public string? Username { get; set; }
+        public string? DisplayName { get; set; }
+        public string? Password { get; set; }
     }
     RegisterModel registerModel = new();
-    string Error;
+    string? Error = null;
 
     async Task HandleRegister()
     {
         Error = null;
+        if (string.IsNullOrEmpty(registerModel.Username) || string.IsNullOrEmpty(registerModel.DisplayName) || string.IsNullOrEmpty(registerModel.Password))
+        {
+            Error = "Все поля должны быть заполнены.";
+            return;
+        }
         var ok = await AuthService.Register(registerModel.Username, registerModel.DisplayName, registerModel.Password);
         if (ok)
         {

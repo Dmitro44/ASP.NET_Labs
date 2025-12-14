@@ -28,15 +28,20 @@
 @code {
     public class LoginModel
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public string? Username { get; set; }
+        public string? Password { get; set; }
     }
     LoginModel loginModel = new();
-    string Error;
+    string? Error = null;
 
     async Task HandleLogin()
     {
         Error = null;
+        if (string.IsNullOrEmpty(loginModel.Username) || string.IsNullOrEmpty(loginModel.Password))
+        {
+            Error = "Имя пользователя и пароль не могут быть пустыми.";
+            return;
+        }
         var ok = await AuthService.Login(loginModel.Username, loginModel.Password);
         if (ok)
         {
