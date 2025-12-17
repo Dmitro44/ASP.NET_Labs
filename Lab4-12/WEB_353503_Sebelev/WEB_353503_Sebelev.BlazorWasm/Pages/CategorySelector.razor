@@ -28,7 +28,7 @@
                     <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
                         <li>
                             <a class="dropdown-item-text @(DataService.SelectedCategory == null ? "active" : "")" 
-                               @onclick="@((e) => HandleSelectCategory(null, e))">
+                               @onclick="@(() => HandleSelectCategory(null))">
                                 Все категории
                             </a>
                         </li>
@@ -39,7 +39,7 @@
                             <li>
                                 <a 
                                     class="dropdown-item @(DataService.SelectedCategory?. Id == category.Id ? "active" : "")" 
-                                    @onclick="@((e) => HandleSelectCategory(category, e))">
+                                    @onclick="@(() => HandleSelectCategory(category))">
                                     @category.Name
                                 </a>
                             </li>
@@ -61,7 +61,7 @@
         await DataService.GetCategoryListAsync();
     }
 
-    private async Task HandleSelectCategory(Category? selectedCategory, MouseEventArgs e)
+    private async Task HandleSelectCategory(Category? selectedCategory)
     {
         DataService.SelectedCategory = selectedCategory;
 
